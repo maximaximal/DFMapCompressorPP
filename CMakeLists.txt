@@ -20,7 +20,7 @@ set(APPSRCS
 
 add_library(dfmapcompressorpp SHARED ${LIBSRCS})
 set_property(TARGET dfmapcompressorpp PROPERTY CXX_STANDARD 20)
-target_link_libraries(dfmapcompressorpp PUBLIC xxHash)
+target_link_libraries(dfmapcompressorpp PUBLIC xxHash zlib)
 
 add_executable(dfmapcompresspp ${APPSRCS})
 set_property(TARGET dfmapcompresspp PROPERTY CXX_STANDARD 20)

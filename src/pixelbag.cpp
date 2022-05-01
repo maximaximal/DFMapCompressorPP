@@ -28,15 +28,7 @@ pixelbag::load_from_file(const std::string& path) {
   width_ = x;
   height_ = y;
 
-  std::cout << "Filename: " << filename_ << std::endl;
-
-  std::cout << "X: " << x << ", Y: " << y << std::endl;
-  std::cout << "X/48: " << x / 48 << ", Y/48: " << y / 48 << std::endl;
-
-  std::cout << "X/48%16: " << x / 48 % 16 << ", Y/48%24: " << y / 48 % 24
-            << std::endl;
-
-  return true;
+  return width_ * height_ > 10;
 }
 
 pixelbag::tile_iterator::tile_iterator(pixelbag& bag)
@@ -93,5 +85,16 @@ pixelbag::tile_iterator::read_pixels() {
 
     pos += bag_.width_ * RGB;
   }
+}
+
+int
+pixelbag::parse_filename_to_layernum() const {
+  auto layernumstart = filename_.find('-') + 1;
+  auto layernumend = filename_.find('-', layernumstart);
+
+  std::string layernum =
+    filename_.substr(layernumstart, layernumend - layernumstart);
+
+  return atoi(layernum.c_str());
 }
 }

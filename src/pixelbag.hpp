@@ -81,10 +81,15 @@ class pixelbag {
 
   tile_range tiles(TileSize w, TileSize h) { return tile_range(*this, w, h); }
 
+  size_t tiles_x(TileSize w) const { return width_ / w; }
+  size_t tiles_y(TileSize h) const { return height_ / h; }
+
   public:
   pixelbag();
 
   bool load_from_file(const std::string& path);
+
+  int parse_filename_to_layernum() const;
 
   private:
   STBIPtr data_;

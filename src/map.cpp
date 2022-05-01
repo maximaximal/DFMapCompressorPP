@@ -12,12 +12,21 @@ map::~map() {}
 bool
 map::add_layer(pixelbag&& bag) {
   auto tiles = bag.tiles(tileset_->tile_width, tileset_->tile_height);
-  std::cout << std::distance(tiles.begin(), tiles.end()) << std::endl;
 
   assert(tiles.begin() != tiles.end());
 
+  int layernum = bag.parse_filename_to_layernum();
+
+  size_t width = bag.tiles_x(tileset_->tile_width);
+  size_t height = bag.tiles_x(tileset_->tile_height);
+
+  auto layerIt = layers_.emplace(layernum, layer{ tileset_, width, height });
+  layer& l = layerIt.first->second;
+
+  std::cerr << "Parsing layer " << layernum << std::endl;
+
   for(auto &t : tiles) {
-    tileref ref = (*tileset_)[t];
+    l.add_tile((*tileset_)[t]);
   }
 
   return true;

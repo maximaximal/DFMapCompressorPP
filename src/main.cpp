@@ -2,8 +2,8 @@
 
 #include <boost/program_options.hpp>
 
-#include "pixelbag.hpp"
 #include "map.hpp"
+#include "pixelbag.hpp"
 #include "tileset.hpp"
 
 using namespace dfmapcompressorpp;
@@ -47,9 +47,9 @@ main(int argc, char* argv[]) {
 
     for(const auto& input : inputs) {
       pixelbag b;
-      b.load_from_file(input);
-
-      m.add_layer(std::move(b));
+      if(b.load_from_file(input)) {
+        m.add_layer(std::move(b));
+      }
     }
   }
 
