@@ -1,0 +1,13 @@
+#+TITLE: DFMapCompressPP
+#+AUTHOR: Max Heisinger
+
+* DFMapCompressPP
+
+This is the spiritual successor to [[https://github.com/Ramblurr/df-map-compressor][Shadowlord13's map compressor]]. It is written
+in C++ and aims to implement some core functionality as efficient and portable
+as possible and to make Dwarf Fortress map sharing more accessible to everyone.
+
+* Detecting Tile Size
+
+Tile size detecion is quite a hard problem. The [[https://github.com/Ramblurr/df-map-compressor/blob/master/DwarfFortressMapViewer/TiledBitmapWrapper.cs#L142][original code is here]] and tries
+to find some detailed tile, which it then matches.
