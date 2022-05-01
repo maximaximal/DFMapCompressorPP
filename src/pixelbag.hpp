@@ -84,12 +84,12 @@ class pixelbag {
   size_t tiles_x(TileSize w) const { return width_ / w; }
   size_t tiles_y(TileSize h) const { return height_ / h; }
 
-  public:
   pixelbag();
 
   bool load_from_file(const std::string& path);
 
   int parse_filename_to_layernum() const;
+  std::string parse_filename_to_fortress_name() const;
 
   private:
   STBIPtr data_;

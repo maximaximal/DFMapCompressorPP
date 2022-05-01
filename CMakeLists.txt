@@ -8,6 +8,7 @@ set(LIBSRCS
     src/layer.cpp
     src/map.cpp
     src/tile.cpp
+    src/fdf-map.cpp
     src/tileset.cpp
     src/stb_image.c
 )

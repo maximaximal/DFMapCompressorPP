@@ -1,7 +1,9 @@
+#include <fstream>
 #include <iostream>
 
 #include <boost/program_options.hpp>
 
+#include "fdf-map.hpp"
 #include "map.hpp"
 #include "pixelbag.hpp"
 #include "tileset.hpp"
@@ -16,6 +18,7 @@ main(int argc, char* argv[]) {
   options.add_options()
     ("help", "produce help message")
     ("input", po::value<std::vector<std::string>>()->multitoken(), "input files to analyze and compress")
+    ("write-fdfmap", po::value<std::string>(), "target to write .fdf-map file to. fortress name by default.")
     ("tilewidth,w", po::value<TileSize>()->required(), "tile width")
     ("tileheight,h", po::value<TileSize>()->required(), "tile height");
   // clang-format on
@@ -51,6 +54,14 @@ main(int argc, char* argv[]) {
         m.add_layer(std::move(b));
       }
     }
+
+    std::string outname = m.fortress_name() + ".fdf-map";
+    if(vm.count("write-fdfmap") > 0)
+      outname = vm["write-fdfmap"].as<std::string>();
+
+    std::ofstream of(outname, std::ofstream::binary);
+    fdfmap(m).write_to(of);
+    of.close();
   }
 
   return 0;

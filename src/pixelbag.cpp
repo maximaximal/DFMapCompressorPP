@@ -74,16 +74,23 @@ pixelbag::tile_iterator::read_pixels() {
   assert(t_.w > 0);
 
   const size_t RGB = 3;
-  size_t pos = bagtilenum_ * RGB * t_.w;
+
+  size_t tiles_x = bag_.tiles_x(t_.w);
+  size_t tiles_y = bag_.tiles_y(t_.h);
+
+  size_t tile_x = bagtilenum_ % tiles_x;
+  size_t tile_y = bagtilenum_ / tiles_x;
+
+  size_t tile_px_xy0 =
+    (tile_y * t_.w * t_.h * tiles_x * RGB) + tile_x * t_.w * RGB;
 
   for(size_t line = 0; line < t_.h; ++line) {
-    const uint8_t* begin = bag_.data_.get() + pos;
+    const uint8_t* begin =
+      bag_.data_.get() + tile_px_xy0 + (line * tiles_x * t_.w * RGB);
     const uint8_t* end = begin + RGB * t_.w;
 
     uint8_t* tgt = &pixels_[line * t_.w * RGB];
     std::copy(begin, end, tgt);
-
-    pos += bag_.width_ * RGB;
   }
 }
 
@@ -96,5 +103,18 @@ pixelbag::parse_filename_to_layernum() const {
     filename_.substr(layernumstart, layernumend - layernumstart);
 
   return atoi(layernum.c_str());
+}
+
+std::string
+pixelbag::parse_filename_to_fortress_name() const {
+  auto fortressname_end = filename_.find('-');
+  auto regionname_start = filename_.find('-', fortressname_end + 1) + 1;
+  auto regionname_end = filename_.find('-', regionname_start);
+
+  std::string fortress_name =
+    filename_.substr(0, fortressname_end) + "-" +
+    filename_.substr(regionname_start, regionname_end - regionname_start);
+
+  return fortress_name;
 }
 }
