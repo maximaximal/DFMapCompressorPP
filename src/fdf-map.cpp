@@ -32,12 +32,12 @@ fdfmap::~fdfmap() {}
 template<typename UnitType>
 static void
 write_layer_as_units(const layer& l, zstr::ostream& zos) {
-  UnitType line[l.width];
-  for(size_t y = 0; y < l.height; ++y) {
-    for(size_t x = 0; x < l.width; ++x) {
-      line[x] = l[y * l.width + x].id;
+  UnitType col[l.height];
+  for(size_t x = 0; x < l.width; ++x) {
+    for(size_t y = 0; y < l.height; ++y) {
+      col[y] = l[y * l.width + x].id;
     }
-    zos.write(reinterpret_cast<char*>(line), sizeof(line));
+    zos.write(reinterpret_cast<char*>(col), sizeof(col));
   }
 }
 
