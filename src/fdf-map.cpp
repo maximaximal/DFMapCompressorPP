@@ -49,10 +49,13 @@ write_run_length_encoded_px_arr(const Pixel* first_px,
   const Pixel* next = first_px + 3;
 
   uint8_t num = 1;
+  size_t outputted = 0;
   for(size_t i = 0; i < n; ++i) {
 
-    if(px[0] != next[0] || px[1] != next[1] || px[2] != next[2] || i == n - 1) {
+    if(px[0] != next[0] || px[1] != next[1] || px[2] != next[2] || i == n - 1 ||
+       i == std::numeric_limits<decltype(i)>::max()) {
       zos << AsBin(num) << AsBin(px[0]) << AsBin(px[1]) << AsBin(px[2]);
+      outputted += num;
       num = 1;
     } else {
       ++num;
@@ -61,6 +64,7 @@ write_run_length_encoded_px_arr(const Pixel* first_px,
     px = next;
     next += 3;
   }
+  assert(outputted == n);
 }
 
 void
@@ -88,7 +92,7 @@ fdfmap::write_to(std::ostream& os) {
   }
 
   // Tile Info
-  for(size_t tileid = 0; tileid < t.number_of_tiles(); ++tileid) {
+  for(size_t tileid = 0; tileid < number_of_tiles; ++tileid) {
     // TileID, but this is ignored by the web viewer.
     uint8_t character_code = 0xff, background_color = 0xff,
             foreground_color = 0xff;
@@ -106,9 +110,9 @@ fdfmap::write_to(std::ostream& os) {
   // Layer Data
   for(const auto& it : m.layers()) {
     const layer& l = it.second;
-    if(number_of_tiles < std::numeric_limits<uint8_t>::max()) {
+    if(number_of_tiles < 127) {
       write_layer_as_units<uint8_t>(l, zos);
-    } else if(number_of_tiles < std::numeric_limits<uint16_t>::max()) {
+    } else if(number_of_tiles < 32767) {
       write_layer_as_units<uint16_t>(l, zos);
     } else {
       write_layer_as_units<uint32_t>(l, zos);
