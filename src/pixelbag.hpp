@@ -81,8 +81,8 @@ class pixelbag {
 
   tile_range tiles(TileSize w, TileSize h) { return tile_range(*this, w, h); }
 
-  size_t tiles_x(TileSize w) const { return width_ / w; }
-  size_t tiles_y(TileSize h) const { return height_ / h; }
+  inline size_t tiles_x(TileSize w) const { return width_ / w; }
+  inline size_t tiles_y(TileSize h) const { return height_ / h; }
 
   pixelbag();
 

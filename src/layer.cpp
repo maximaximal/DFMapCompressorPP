@@ -3,12 +3,8 @@
 #include "tileset.hpp"
 
 namespace dfmapcompressorpp {
-layer::layer(std::shared_ptr<tileset> tileset,
-             int l,
-             size_t width,
-             size_t height)
-  : tileset_(tileset)
-  , l(l)
+layer::layer(int l, size_t width, size_t height)
+  : l(l)
   , width(width)
   , height(height) {
   tiles_.reserve(width * height);

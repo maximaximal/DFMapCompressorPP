@@ -12,7 +12,7 @@ class tileset;
 
 class layer {
   public:
-  layer(std::shared_ptr<tileset> tileset, int l, size_t width, size_t height);
+  layer(int l, size_t width, size_t height);
   ~layer();
 
   void add_tile(tileref t);
@@ -22,7 +22,6 @@ class layer {
   inline tileref operator[](size_t i) const { return tiles_[i]; }
 
   private:
-  std::shared_ptr<tileset> tileset_;
   std::vector<tileref> tiles_;
 };
 }

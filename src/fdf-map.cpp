@@ -35,7 +35,9 @@ write_layer_as_units(const layer& l, zstr::ostream& zos) {
   UnitType col[l.height];
   for(size_t x = 0; x < l.width; ++x) {
     for(size_t y = 0; y < l.height; ++y) {
-      col[y] = l[y * l.width + x].id;
+      auto id = l[y * l.width + x].id;
+      assert(std::numeric_limits<UnitType>::max() >= id);
+      col[y] = id;
     }
     zos.write(reinterpret_cast<char*>(col), sizeof(col));
   }
@@ -43,18 +45,19 @@ write_layer_as_units(const layer& l, zstr::ostream& zos) {
 
 static void
 write_run_length_encoded_px_arr(const Pixel* first_px,
-                                size_t n,
+                                int32_t n,
                                 zstr::ostream& zos) {
   const Pixel* px = first_px;
   const Pixel* next = first_px + 3;
 
   uint8_t num = 1;
-  size_t outputted = 0;
-  for(size_t i = 0; i < n; ++i) {
+  int32_t outputted = 0;
+  for(int32_t i = 0; i < n; ++i) {
 
     if(px[0] != next[0] || px[1] != next[1] || px[2] != next[2] || i == n - 1 ||
        i == std::numeric_limits<decltype(i)>::max()) {
-      zos << AsBin(num) << AsBin(px[0]) << AsBin(px[1]) << AsBin(px[2]);
+      // As BGR not RGB!
+      zos << AsBin(num) << AsBin(px[2]) << AsBin(px[1]) << AsBin(px[0]);
       outputted += num;
       num = 1;
     } else {
@@ -71,7 +74,7 @@ void
 fdfmap::write_to(std::ostream& os) {
   zstr::ostream zos(os, zstr::default_buff_size, Z_DEFAULT_COMPRESSION, 15);
 
-  int32_t version = -1 | TILE_ID_INFO;
+  int32_t version = -1;
   zos << AsBin(version);
 
   int32_t number_of_tiles = t.number_of_tiles();
@@ -96,11 +99,10 @@ fdfmap::write_to(std::ostream& os) {
     // TileID, but this is ignored by the web viewer.
     uint8_t character_code = 0xff, background_color = 0xff,
             foreground_color = 0xff;
-    zos << AsBin(character_code) << AsBin(background_color)
-        << AsBin(foreground_color);
+    //zos << AsBin(character_code) << AsBin(background_color)
+    //    << AsBin(foreground_color);
 
-    size_t number_of_pixels = tile_width * tile_height;
-    zos << AsBin(static_cast<uint8_t>(number_of_pixels));
+    int32_t number_of_pixels = tile_width * tile_height;
 
     // Pixel data
     const Pixel* px = t[tileid];
@@ -110,9 +112,9 @@ fdfmap::write_to(std::ostream& os) {
   // Layer Data
   for(const auto& it : m.layers()) {
     const layer& l = it.second;
-    if(number_of_tiles < 127) {
+    if(number_of_tiles <= 127) {
       write_layer_as_units<uint8_t>(l, zos);
-    } else if(number_of_tiles < 32767) {
+    } else if(number_of_tiles <= 32767) {
       write_layer_as_units<uint16_t>(l, zos);
     } else {
       write_layer_as_units<uint32_t>(l, zos);
