@@ -24,6 +24,10 @@ pixelbag::load_from_file(const std::string& path) {
   int y = 0;
   int n = 0;
   data_.reset(stbi_load(path.c_str(), &x, &y, &n, 3));
+  if(!data_) {
+    std::cerr << "!! Could not open image \"" << path << "\"!" << std::endl;
+    return false;
+  }
 
   width_ = x;
   height_ = y;

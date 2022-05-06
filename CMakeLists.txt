@@ -2,16 +2,17 @@ cmake_minimum_required(VERSION 3.10)
 project(dfmapcompressorpp)
 
 if(WIN32)
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-    set(CMAKE_C_FLAGS_RELEASE "-O3")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,10000000")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto")
+    set(CMAKE_C_FLAGS_RELEASE "-O3 -flto")
 else()
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin -fsanitize=address -fsanitize=undefined")
-    set(CMAKE_C_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin -fsanitize=address -fsanitize=undefined")
-    set(CMAKE_CXX_FLAGS_DEBUG "-fsanitize=address -fsanitize=undefined")
-    set(CMAKE_C_FLAGS_DEBUG "-fsanitize=address -fsanitize=undefined")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin")
+    set(CMAKE_C_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-flto")
 endif()
+
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 set(LIBSRCS
     src/pixelbag.cpp

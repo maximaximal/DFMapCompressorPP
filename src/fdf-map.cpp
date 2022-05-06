@@ -1,4 +1,5 @@
 #include <limits>
+#include <cstdint>
 
 #include "fdf-map.hpp"
 #include "layer.hpp"
@@ -55,7 +56,7 @@ write_run_length_encoded_px_arr(const Pixel* first_px,
   for(int32_t i = 0; i < n; ++i) {
 
     if(px[0] != next[0] || px[1] != next[1] || px[2] != next[2] || i == n - 1 ||
-       i == std::numeric_limits<decltype(i)>::max()) {
+       i == std::numeric_limits<decltype(num)>::max()) {
       // As BGR not RGB!
       zos << AsBin(num) << AsBin(px[2]) << AsBin(px[1]) << AsBin(px[0]);
       outputted += num;
