@@ -18,7 +18,7 @@ pixelbag::load_from_file(const std::string& path) {
   }
 
   path_ = path;
-  filename_ = p.filename();
+  filename_ = p.filename().string();
 
   int x = 0;
   int y = 0;

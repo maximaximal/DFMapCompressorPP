@@ -6,7 +6,9 @@ extern "C" {
 #include <unistd.h>
 }
 
+#if !defined(_WIN32) && !defined(WIN32)
 #include "indicators.hpp"
+#endif
 
 #include "fdf-map.hpp"
 #include "map.hpp"
@@ -42,7 +44,6 @@ help() {
 
 int
 main(int argc, char* argv[]) {
-  using namespace indicators;
 
   if(argc == 0)
     return EXIT_FAILURE;
@@ -59,6 +60,8 @@ main(int argc, char* argv[]) {
     }
   }
 
+#if !defined(_WIN32) && !defined(WIN32)
+  using namespace indicators;
   ProgressBar bar{ option::BarWidth{ 60 },
                    option::Start{ "[" },
                    option::Fill{ "=" },
@@ -70,6 +73,7 @@ main(int argc, char* argv[]) {
                    option::FontStyles{
                      std::vector<FontStyle>{ FontStyle::bold } } };
   bar.set_progress(1);
+#endif
 
   std::string outName;
 
@@ -107,7 +111,11 @@ main(int argc, char* argv[]) {
     int picture_count = argc - optind;
     double percentage_done =
       static_cast<double>(i - optind) / (picture_count + 1);
+#if !defined(_WIN32) && !defined(WIN32)
     bar.set_progress(percentage_done * 100);
+#else
+    std::cerr << static_cast<int>(percentage_done * 100) << " %" << std::endl;
+#endif
 
     const char* input = argv[i];
     pixelbag b;
@@ -116,11 +124,18 @@ main(int argc, char* argv[]) {
     }
   }
 
+  if(m.layers().size() == 0) {
+    std::cerr << "No layers parsed!" << std::endl;
+    return EXIT_FAILURE;
+  }
+
   if(outName.empty())
     outName = m.fortress_name() + ".fdf-map";
 
+#if !defined(_WIN32) && !defined(WIN32)
   bar.set_option(option::PostfixText{ "Compressing to .fdf-map" });
   bar.set_progress(99);
+#endif
 
   std::ofstream of(outName, std::ofstream::binary);
   fdfmap(m).write_to(of);
