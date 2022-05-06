@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(dfmapcompressorpp)
 
-find_package(Boost COMPONENTS program_options)
-
 set(LIBSRCS
     src/pixelbag.cpp
     src/layer.cpp
@@ -25,4 +23,4 @@ target_link_libraries(dfmapcompressorpp PUBLIC xxHash zlib)
 
 add_executable(dfmapcompresspp ${APPSRCS})
 set_property(TARGET dfmapcompresspp PROPERTY CXX_STANDARD 20)
-target_link_libraries(dfmapcompresspp PUBLIC dfmapcompressorpp Boost::program_options)
+target_link_libraries(dfmapcompresspp PUBLIC dfmapcompressorpp)

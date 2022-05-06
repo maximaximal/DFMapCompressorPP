@@ -129,3 +129,4 @@ tags
 /.ccls-cache/
 /build/
 /compile_commands.json
+/build-release/

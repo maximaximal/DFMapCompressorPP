@@ -31,9 +31,6 @@ map::add_layer(pixelbag&& bag) {
     layers_.emplace(layernum, layer{ layernum, width, height });
   layer& l = layerIt.first->second;
 
-  std::cerr << "Parsing layer " << layernum << " of " << fortress_name_
-            << std::endl;
-
   for(auto& t : tiles) {
     l.add_tile((*tileset_)[t]);
   }
