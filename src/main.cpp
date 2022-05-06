@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <regex>
 
 extern "C" {
 #include <unistd.h>
@@ -43,6 +44,21 @@ int
 main(int argc, char* argv[]) {
   using namespace indicators;
 
+  if(argc == 0)
+    return EXIT_FAILURE;
+
+  TileSize tileWidth = 16, tileHeight = 16;
+
+  {
+    std::regex rgx("(\\d+)x(\\d+)");
+    std::cmatch c;
+
+    if(std::regex_search(argv[0], c, rgx)) {
+      tileWidth = stoi(c[1].str());
+      tileHeight = stoi(c[2].str());
+    }
+  }
+
   ProgressBar bar{ option::BarWidth{ 60 },
                    option::Start{ "[" },
                    option::Fill{ "=" },
@@ -53,9 +69,8 @@ main(int argc, char* argv[]) {
                    option::ForegroundColor{ Color::green },
                    option::FontStyles{
                      std::vector<FontStyle>{ FontStyle::bold } } };
-  bar.set_progress(0);
+  bar.set_progress(1);
 
-  TileSize tileWidth, tileHeight;
   std::string outName;
 
   int c;
