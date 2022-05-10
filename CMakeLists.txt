@@ -4,6 +4,9 @@ project(dfmapcompressorpp)
 if(WIN32)
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto")
     set(CMAKE_C_FLAGS_RELEASE "-O3 -flto")
+
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+    set(CMAKE_EXE_LINKER_FLAGS "-static")
 else()
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin")
     set(CMAKE_C_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin")
@@ -12,9 +15,7 @@ else()
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-flto")
 endif()
 
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 set(BUILD_SHARED_LIBS OFF)
-set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 set(LIBSRCS
     src/pixelbag.cpp
