@@ -7,6 +7,8 @@ if(WIN32)
 else()
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin")
     set(CMAKE_C_FLAGS_RELEASE "-O3 -flto -fno-use-linker-plugin")
+    set(CMAKE_CXX_FLAGS_DEBUG "-fsanitize=address -fsanitize=undefined")
+    set(CMAKE_C_FLAGS_DEBUG "-fsanitize=address -fsanitize=undefined")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-flto")
 endif()
 

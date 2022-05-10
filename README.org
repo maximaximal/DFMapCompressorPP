@@ -1,13 +1,59 @@
-#+TITLE: DFMapCompressPP
+#+TITLE: DFMapCompressorPP
 #+AUTHOR: Max Heisinger
-
-* DFMapCompressPP
 
 This is the spiritual successor to [[https://github.com/Ramblurr/df-map-compressor][Shadowlord13's map compressor]]. It is written
 in C++ and aims to implement some core functionality as efficient and portable
 as possible and to make Dwarf Fortress map sharing more accessible to everyone.
 
-* Detecting Tile Size
+** Usage
+
+Supply any number of layers to the ~dfmapcompresspp~ binary and wait for the
+process to continue. On Windows, progress is printed as percentages, on Linux
+and MacOS, a progress-bar is rendered.
+
+#+BEGIN_SRC bash
+./dfmapcompresspp -w <width> -h <height> -o <outname> <path/to/layerX.bmp>+
+#+END_SRC
+
+The ~outname~ is optional, the output file will be named after the fortress name
+deducted from the layers if the option is not given.
+
+*** Tile Size in Executable Name
+
+To speed things up, you can specify the tile size in the executable name. This
+is done by having ~WIDTHxHEIGHT~ somewhere in the name of the binary. For
+example, if you name your binary ~dfmapcompresspp-8x12~, then the new default
+tile size will be 8 pixels wide and 12 pixels high.
+
+*** Using Windows Explorer to create Maps
+
+Windows Explorer has the neat trick of dragging files ontop of executables. When
+you select all the layers you want to compress and drop them on the
+~dfmapcompresspp-WIDTHxHEIGHT~ binary, Windows will automatically run the
+compressor with the provided inputs. This way, you don't have to worry about any
+terminal and still have a fast dependency-less compressor.
+
+** Compiling
+
+DFMapCompressorPP has no other dependencies than are bundled in the
+~third_party~ directory here in the repository and working C and C++20
+compiler. To compile the software, clone it and call CMake, followed by your
+compilation method of choice:
+
+#+BEGIN_SRC bash
+git clone https://github.com/maximaximal/DFMapCompressorPP.git
+cd DFMapCompressorPP
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j
+#+END_SRC
+
+For Windows, MSYS2 is supported well. To make usage easier, a Windows x64 binary
+is provided in the releases of this repository.
+
+** Detecting Tile Size
 
 Tile size detecion is quite a hard problem. The [[https://github.com/Ramblurr/df-map-compressor/blob/master/DwarfFortressMapViewer/TiledBitmapWrapper.cs#L142][original code is here]] and tries
-to find some detailed tile, which it then matches.
+to find some detailed tile, which it then matches. This is not implemented yet
+in this compressor.

@@ -60,21 +60,6 @@ main(int argc, char* argv[]) {
     }
   }
 
-#if !defined(_WIN32) && !defined(WIN32)
-  using namespace indicators;
-  ProgressBar bar{ option::BarWidth{ 60 },
-                   option::Start{ "[" },
-                   option::Fill{ "=" },
-                   option::Lead{ ">" },
-                   option::Remainder{ " " },
-                   option::End{ " ]" },
-                   option::PostfixText{ "Reading images" },
-                   option::ForegroundColor{ Color::green },
-                   option::FontStyles{
-                     std::vector<FontStyle>{ FontStyle::bold } } };
-  bar.set_progress(1);
-#endif
-
   std::string outName;
 
   int c;
@@ -104,6 +89,21 @@ main(int argc, char* argv[]) {
         abort();
     }
   }
+
+#if !defined(_WIN32) && !defined(WIN32)
+  using namespace indicators;
+  ProgressBar bar{ option::BarWidth{ 60 },
+                   option::Start{ "[" },
+                   option::Fill{ "=" },
+                   option::Lead{ ">" },
+                   option::Remainder{ " " },
+                   option::End{ " ]" },
+                   option::PostfixText{ "Reading images" },
+                   option::ForegroundColor{ Color::green },
+                   option::FontStyles{
+                     std::vector<FontStyle>{ FontStyle::bold } } };
+  bar.set_progress(1);
+#endif
 
   map m(std::make_shared<tileset>(tileWidth, tileHeight));
 
