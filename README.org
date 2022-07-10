@@ -57,3 +57,22 @@ is provided in the releases of this repository.
 Tile size detecion is quite a hard problem. The [[https://github.com/Ramblurr/df-map-compressor/blob/master/DwarfFortressMapViewer/TiledBitmapWrapper.cs#L142][original code is here]] and tries
 to find some detailed tile, which it then matches. This is not implemented yet
 in this compressor.
+
+** PHP-Based Web-Viewer
+
+This project also includes a PHP-based viewer to display maps on the web. The
+viewer is a simple PNG image renderer using GD that is controlled using GET
+parameters. They are documented here:
+
+  - t :: Render tileset instead of a layer
+  - l :: Render specified layer (indexed from the depth encoded in the file)
+  - cl :: Render specified layer (indexed from the absolute render index number in the file)
+  - m :: Path to a ~.fdf-map~ file. Also loads from remote resources.
+  - d :: Print debug information
+
+These parameters have to be given to the PHP script on an URL like this:
+~dfmappreview.php?m=MAP.fdf-map&l=200~. It can be tested locally using the local
+PHP development server, like this: ~php -S localhost:8000~ and then go to
+http://localhost:8000/dfmappreview.php
+
+It also works with legacy files loaded from the Dwarf Fortress Map Archive.
