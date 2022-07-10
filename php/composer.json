@@ -1,0 +1,16 @@
+{
+	"repositories": [
+		{
+			"type": "path",
+			"url": "./local/php-binary-reader-1.0.9/"
+		}
+	],
+
+	"require": {
+		"mdurrant/php-binary-reader": "*"
+	},
+
+	"minimum-stability": "dev"
+
+}
+

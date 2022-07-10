@@ -1,0 +1,62 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "377b914b07a64ef7d8613986a60d1091",
+    "packages": [
+        {
+            "name": "mdurrant/php-binary-reader",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./local/php-binary-reader-1.0.9",
+                "reference": "289fb4a1c4654dbfbbcb2799fc809389d9a7fde1"
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpBinaryReader\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Durrant",
+                    "email": "mdurrant@gmail.com"
+                }
+            ],
+            "description": "Lightweight binary reader for PHP",
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
+}
