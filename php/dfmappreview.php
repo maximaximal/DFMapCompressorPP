@@ -20,6 +20,23 @@ if(isset($_GET["l"]))
 if(isset($_GET["d"]))
 	$print_debug_info = TRUE;
 
+$file_last_mod_time = filemtime(__FILE__);
+// Content doesn't change, as it is loaded externally on request.
+$content_last_mod_time = 0;
+$etag = '"' . $file_last_mod_time . '.' . $content_last_mod_time . '"';
+header("Content-type: image/png");
+header('ETag: ' . $etag);
+header('Cache-Control: max-age=86400');
+// Check whether browser had sent a HTTP_IF_NONE_MATCH request header
+if(isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+	// If HTTP_IF_NONE_MATCH is same as the generated ETag => content is the same as browser cache
+	// So send a 304 Not Modified response header and exit
+	if($_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
+		header('HTTP/1.1 304 Not Modified', true, 304);
+		exit();
+	}
+}
+
 $compressed = file_get_contents($input_map, 'rb');
 $uncompressed = zlib_decode($compressed);
 $br = new PhpBinaryReader\BinaryReader($uncompressed, PhpBinaryReader\Endian::ENDIAN_LITTLE);
@@ -120,8 +137,9 @@ for($i = 0; $i < $number_of_tiles; ++$i) {
 	imagecolordeallocate($tileset, $color);
 }
 
+header("Content-type: image/png");
+
 if($display_tileset) {
-	header("Content-type: image/png");
 	imagepng($tileset);
 	exit();
 }
@@ -170,6 +188,5 @@ for($i = 0; $i < $number_of_map_layers; ++$i) {
 	break;
 }
 
-header("Content-type: image/png");
 imagepng($map);
 
