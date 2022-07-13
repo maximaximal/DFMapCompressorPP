@@ -17,7 +17,7 @@ jobs:
       - run: sudo apt-get -y install emscripten cmake
       - run: mkdir build
       - run: emcmake cmake -B build . -DCMAKE_BUILD_TYPE=Release
-      - run: emmake make
+      - run: emmake make -C build
       - run: cp build/dfmapcompressorpp.{js,wasm} web/
       - name: Deploy to GH pages
         uses: peaceiris/actions-gh-pages@v3
