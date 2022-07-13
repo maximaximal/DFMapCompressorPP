@@ -16,33 +16,36 @@ process_images(int tileWidth,
                std::vector<std::string> files,
                emscripten::val progress) {
   try {
-  map m(std::make_shared<tileset>(tileWidth, tileHeight));
+    map m(std::make_shared<tileset>(tileWidth, tileHeight));
 
-  if(files.size() == 0)
-    return nullptr;
+    if(files.size() == 0)
+      return nullptr;
 
-  float steps = files.size() + 1;
+    float steps = files.size() + 1;
 
-  for(size_t i = 0; i < files.size(); ++i) {
-    const auto& f = files[i];
-    pixelbag b;
-    if(b.load_from_file(f)) {
-      if(!m.add_layer(std::move(b))) {
+    for(size_t i = 0; i < files.size(); ++i) {
+      const auto& f = files[i];
+      pixelbag b;
+      if(b.load_from_file(f)) {
+        if(!m.add_layer(std::move(b))) {
+          return nullptr;
+        }
+      } else {
+        std::cerr << "Could not read file " << f << std::endl;
         return nullptr;
       }
+      progress(i / steps * 100);
     }
-    progress(i / steps * 100);
-  }
 
-  static std::string outName;
-  outName = m.fortress_name() + ".fdf-map";
-  std::ofstream of(outName, std::ofstream::binary);
-  fdfmap(m).write_to(of);
-  of.close();
+    static std::string outName;
+    outName = m.fortress_name() + ".fdf-map";
+    std::ofstream of(outName, std::ofstream::binary);
+    fdfmap(m).write_to(of);
+    of.close();
 
-  progress(100);
+    progress(100);
 
-  return outName.c_str();
+    return outName.c_str();
   } catch(std::exception& e) {
     return nullptr;
   } catch(...) {
