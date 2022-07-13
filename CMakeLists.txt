@@ -20,8 +20,8 @@ elseif(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Emscripten")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Emscripten")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-    set(CMAKE_C_FLAGS_RELEASE "-O3")
+    set(CMAKE_CXX_FLAGS_RELEASE "-Os")
+    set(CMAKE_C_FLAGS_RELEASE "-Os")
 endif()
 
 set(BUILD_SHARED_LIBS OFF)
@@ -52,8 +52,8 @@ set_property(TARGET dfmapcompressorpp PROPERTY CXX_STANDARD 20)
 target_link_libraries(dfmapcompressorpp PUBLIC xxHash zlibstatic)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Emscripten")
-    target_link_libraries(dfmapcompressorpp PUBLIC embind workerfs.js)
-    set_target_properties(dfmapcompressorpp PROPERTIES LINK_FLAGS "-s ENVIRONMENT=worker -s MODULARIZE=1")
+    target_link_libraries(dfmapcompressorpp PUBLIC embind)
+    set_target_properties(dfmapcompressorpp PROPERTIES LINK_FLAGS "-lworkerfs.js -s ENVIRONMENT=worker -s MODULARIZE=1 -s 'EXPORTED_RUNTIME_METHODS=[\"FS\", \"WORKERFS\"]' -s ALLOW_MEMORY_GROWTH=1")
     target_compile_definitions(dfmapcompressorpp PUBLIC "__MUSL__")
 endif()
 
