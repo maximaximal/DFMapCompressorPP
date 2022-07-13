@@ -1,0 +1,17 @@
+jobs:
+  deploy:
+    permissions:
+      contents: write
+    runs-on: ubuntu-22.04
+    steps:
+      - run: apt-get -y install emscripten cmake
+      - run: mkdir build
+      - run: emcmake cmake -B build . -DCMAKE_BUILD_TYPE=Release
+      - run: emmake make
+      - run: cp build/dfmapcompressorpp.{js,wasm} web/
+      - name: Deploy to GH pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web
