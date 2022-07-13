@@ -12,6 +12,8 @@ jobs:
       contents: write
     runs-on: ubuntu-22.04
     steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
       - run: sudo apt-get -y install emscripten cmake
       - run: mkdir build
       - run: emcmake cmake -B build . -DCMAKE_BUILD_TYPE=Release
