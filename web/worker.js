@@ -19,6 +19,9 @@ Module().then(function(m) {
 	let res = m.process_images(msg["tileWidth"], msg["tileHeight"], l, progresscb);
 	let resFile = FS.readFile(res);
 	postMessage({'type': "result", 'name': res, 'data': resFile});
+	FS.unlink(res);
+	FS.unmount('/input');
+	FS.rmdir('/input');
     };
 
     postMessage({'type': "ready"});

@@ -37,12 +37,15 @@
 	<div class="d-grid gap-2 mt-2">
 	  <button id="button-run" class="btn btn-outline-primary" type="button" disabled>Loading DFCompressorPP...</button>
 	</div>
+	<div class="progress mt-2" id="progress" style="display: none">
+	  <div class="progress-bar" id="progressbar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+	</div>
 
 	<ul id="filelist" class="list-group mt-2">
 	</ul>
       </main>
     </div>
-    <script type="module" src="main.js"></script>
+    <script src="main.js"></script>
     <script src="bootstrap-5.2.0-beta1-dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

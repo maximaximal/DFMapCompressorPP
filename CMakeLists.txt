@@ -20,8 +20,8 @@ elseif(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Emscripten")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Emscripten")
-    set(CMAKE_CXX_FLAGS_RELEASE "-Os")
-    set(CMAKE_C_FLAGS_RELEASE "-Os")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+    set(CMAKE_C_FLAGS_RELEASE "-O3")
 endif()
 
 set(BUILD_SHARED_LIBS OFF)

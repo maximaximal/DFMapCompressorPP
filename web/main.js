@@ -175,21 +175,13 @@ const dfmapcompressorpp = new Worker('worker.js');
 let compressPromiseResolve = null;
 let compressPromiseReject = null;
 
-function setReady() {
-    let button = document.getElementById("button-run");
-    button.disabled = false;
-    button.innerText = "Generate .fdf-map!";
-    button.classList.remove('btn-outline-primary');
-    button.classList.add('btn-primary');
-
-    button.addEventListener('click', async function(e) {
-
-    });
-}
+const button = document.getElementById("button-run");
 
 const inputWidth = document.getElementById('input-tilewidth')
 const inputHeight = document.getElementById('input-tileheight')
 const alertPlaceholder = document.getElementById('alert-placeholder')
+const progressDiv = document.getElementById('progress')
+const progressBar = document.getElementById('progressbar')
 const alert = (message, type) => {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = [
@@ -202,21 +194,9 @@ const alert = (message, type) => {
     alertPlaceholder.append(wrapper)
 }
 
-dfmapcompressorpp.onmessage = msg => {
-    switch(msg.data.type) {
-    case 'ready':
-	setReady();
-	break;
-    case 'progress':
-	console.log(msg.data.progress);
-	break;
-    case 'result':
-	console.log(msg.data.name);
-	const b = new Blob([msg.data.data], {type: "application/octet-stream"});
-	saveAs(b, msg.data.name);
-	break;
-    }
-}
+let compressable_tileWidth = null;
+let compressable_tileHeight = null;
+let compressable_files = null;
 
 const compress = async function(tileWidth, tileHeight, files) {
     let compressPromise = new Promise(function(resolve, reject) {
@@ -225,6 +205,43 @@ const compress = async function(tileWidth, tileHeight, files) {
     });
     dfmapcompressorpp.postMessage({'tileWidth': tileWidth, 'tileHeight': tileHeight, 'files': files});
     return await compressPromise;
+}
+
+const compressable = function(tileWidth, tileHeight, files) {
+    compressable_tileWidth = tileWidth;
+    compressable_tileHeight = tileHeight;
+    compressable_files = files;
+}
+
+function setReady() {
+    button.disabled = false;
+    button.innerText = "Generate .fdf-map!";
+    button.classList.remove('btn-outline-primary');
+    button.classList.add('btn-primary');
+
+    button.addEventListener('click', async function(e) {
+	progressDiv.style.display = 'block';
+	await compress(compressable_tileWidth, compressable_tileHeight, compressable_files);
+	progressDiv.style.display = 'none';
+    });
+}
+
+dfmapcompressorpp.onmessage = msg => {
+    switch(msg.data.type) {
+    case 'ready':
+	setReady();
+	break;
+    case 'progress':
+	const p = msg.data.progress;
+	progressBar.style.width = p + '%';
+	progressBar.innerText = p + '%';
+	progressBar.attributes.ariaValuenow = p;
+	break;
+    case 'result':
+	const b = new Blob([msg.data.data], {type: "application/octet-stream"});
+	saveAs(b, msg.data.name);
+	break;
+    }
 }
 
 let filelist = document.getElementById("filelist");
@@ -320,5 +337,5 @@ elDrop.addEventListener('drop', async function (event) {
     }
     await Promise.all(objs);
     await Promise.all(files);
-    compress(parseInt(inputWidth.value), parseInt(inputHeight.value), objs);
+    compressable(parseInt(inputWidth.value), parseInt(inputHeight.value), objs);
 });
