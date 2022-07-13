@@ -24,7 +24,6 @@ $file_last_mod_time = filemtime(__FILE__);
 // Content doesn't change, as it is loaded externally on request.
 $content_last_mod_time = 0;
 $etag = '"' . $file_last_mod_time . '.' . $content_last_mod_time . '"';
-header("Content-type: image/png");
 header('ETag: ' . $etag);
 header('Cache-Control: max-age=86400');
 // Check whether browser had sent a HTTP_IF_NONE_MATCH request header
@@ -35,6 +34,10 @@ if(isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
 		header('HTTP/1.1 304 Not Modified', true, 304);
 		exit();
 	}
+}
+if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+	header('HTTP/1.1 304 Not Modified');
+	exit();
 }
 
 $compressed = file_get_contents($input_map, 'rb');
@@ -68,6 +71,8 @@ if($print_debug_info) {
 	echo ("Tileset width: $tileset_width, height: $tileset_height<br>");
 	exit();
 }
+
+header("Content-type: image/png");
 
 $tileset = imagecreatetruecolor($tileset_width, $tileset_height);
 
@@ -189,4 +194,3 @@ for($i = 0; $i < $number_of_map_layers; ++$i) {
 }
 
 imagepng($map);
-
