@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DFMapCompressorPP Web</title>
+    <link href="bootstrap-5.2.0-beta1-dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body id="dropzone" class="vh-100">
+    <div class="col-lg-8 mx-auto p-3 py-md-5">
+      <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+	<span class="fs-4">DFCompressorPP Web</span>
+      </header>
+
+      <main>
+	<p>This page embeds the DFMapCompressorPP tool built for Dwarf Fortress
+	inside of your browser. You can <strong>drag and drop
+	BMP-images</strong> of exported Dwarf Fortress maps <strong>anywhere
+	into this page</strong>, which will then be analyzed and converted into
+	a <code>.fdf-map</code> file. Made
+	by <a href="https://maxheisinger.at">Max
+	Heisinger</a>, <a href="https://github.com/maximaximal/DFMapCompressorPP">Source
+	on GitHub</a></p>
+
+	<div id="alert-placeholder"></div>
+
+	<div class="row mt-2">
+	  <div class="col">
+	    <label for="input-tilewidth" class="form-label">Tile Width</label>
+	    <input id="input-tilewidth" type="number" value="8" class="form-control" placeholder="Tile Width"
+	aria-label="Tile Width">
+	  </div>
+	  <div class="col">
+	    <label for="input-tileheight" class="form-label">Tile Height</label>
+	    <input id="input-tileheight" type="number" value="12" class="form-control" placeholder="Tile Height"
+	aria-label="Tile Height">
+	  </div>
+	</div>
+
+	<div class="d-grid gap-2 mt-2">
+	  <button id="button-run" class="btn btn-outline-primary" type="button" disabled>Loading DFCompressorPP...</button>
+	</div>
+	<div class="progress mt-2" id="progress" style="display: none">
+	  <div class="progress-bar" id="progressbar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+	</div>
+
+	<ul id="filelist" class="list-group mt-2">
+	</ul>
+      </main>
+    </div>
+    <script src="main.js"></script>
+    <script src="bootstrap-5.2.0-beta1-dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
